@@ -1,0 +1,28 @@
+ #!/bin/bash
+ # Usage ./PDFsplitr.sh inputfile.PDF outputfile.PDF pagenumber
+ # Example: ./PDFsplitr.sh myfile.PDF myotherfile.PDF 2 GS=$(which gs)
+ # Example: ./PDFsplitr.sh c_teste.PDF c_split.PDF 2 GS=$(which gs)
+
+ # Make sure Ghostscript is installed if [[ $GS = "" ]] then echo "Ghostscript is not installed" exit fi
+ # Run the actual conversion. $GS -sDEVICE=PDFwrite -q -dNOPAUSE -dBATCH -sOutputFile=$2 -dFirstPage=$3 -dLastPage=$3 $1
+ # Run the actual conversion. $GS -sDEVICE=pdfwrite -q -dNOPAUSE -dBATCH -sOutputFile=c_split.PDF -dFirstPage=first -dLastPage=4 c_teste.PDF
+
+$GS -sDEVICE=PDFwrite -q -dNOPAUSE -dBATCH -sOutputFile=$2 -dFirstPage=$3 -dLastPage=$3 $1
+& "C:\Program Files\gs\gs9.27\bin\gswin64c.exe" -sDEVICE=ps2write -q -dNOPAUSE -dBATCH -sOutputFile='c_split0%03d.PDF' 'c_teste.PDF'
+& "C:\Program Files\gs\gs9.27\bin\gswin64c.exe" -sDEVICE=pdfwrite -q -dNOPAUSE -dBATCH -sOutputFile='c_split.PDF' -dFirstPage=1 -dLastPage=4 'c_teste.PDF'
+
+ bbox bit bitcmyk bitrgb bitrgbtags bj10e bj200 bjc600 bjc800 bmp16 bmp16m
+   bmp256 bmp32b bmpgray bmpmono bmpsep1 bmpsep8 cdeskjet cdj550 cdjcolor
+   cdjmono chameleon declj250 deskjet devicen display djet500 djet500c
+   eps2write eps9high eps9mid epson epsonc fpng gprf ibmpro ijs ink_cov
+   inkcov jetp3852 jpeg jpegcmyk jpeggray laserjet lbp8 lj250 ljet2p ljet3
+   ljet3d ljet4 ljet4d ljetplus m8510 mswinpr2 necp6 nullpage pam pamcmyk32
+   pamcmyk4 pbm pbmraw pclm pcx16 pcx24b pcx256 pcxcmyk pcxgray pcxmono
+   pdfimage24 pdfimage32 pdfimage8 pdfwrite pgm pgmraw pgnm pgnmraw pj pjxl
+   pjxl300 pkmraw plan planc plang plank planm planr plib plibc plibg plibk
+   plibm png16 png16m png256 pngalpha pnggray pngmono pngmonod pnm pnmcmyk
+   pnmraw ppm ppmraw ps2write psdcmyk psdcmyk16 psdcmykog psdrgb psdrgb16
+   pxlcolor pxlmono r4081 spotcmyk st800 stcolor t4693d2 t4693d4 t4693d8
+   tek4696 tiff12nc tiff24nc tiff32nc tiff48nc tiff64nc tiffcrle tiffg3
+   tiffg32d tiffg4 tiffgray tifflzw tiffpack tiffscaled tiffscaled24
+   tiffscaled32 tiffscaled4 tiffscaled8 tiffsep tiffsep1 txtwrite uniprint
