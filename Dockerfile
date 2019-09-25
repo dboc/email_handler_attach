@@ -1,5 +1,5 @@
 FROM python:3
-RUN apt-get install -y ghostscript
+RUN apt-get update && apt-get install -y ghostscript
 ENV GC_BIN=gs
 COPY . /app
 WORKDIR /app

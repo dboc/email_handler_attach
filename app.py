@@ -308,7 +308,7 @@ def run():
 while True:
     time_now = datetime.datetime.now()
     if(time_now.hour > 18):
-        print(f'Next execution:{time_now + datetime.timedelta(hour=12)}')
+        print(f'Next execution:{time_now + datetime.timedelta(hours=12)}')
         time.sleep(3600*12)
     else:
         try:
