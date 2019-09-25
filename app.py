@@ -20,11 +20,10 @@ GC_BIN = os.getenv('GC_BIN', r'C:\Program Files\gs\gs9.27\bin\gswin64c.exe')
 PATH = os.getenv('PATH', os.path.dirname(os.path.realpath(__file__)))
 HOST_SMTP = os.getenv('HOST_SMTP', 'smtp.gmail.com')
 HOST_IMAP = os.getenv('HOST_IMAP', 'imap.gmail.com')
-USER = os.getenv('USER', 'hmcamila.caixa')
+USER = os.getenv('USER', '')
 PSS = os.getenv('PSS', '')
-FROM_ADDR = os.getenv('FROM_ADDR', 'hmcamila.caixa@gmail.com')
-# TO_ADDR = 'camila.martins@caixa.gov.br'
-TO_ADDR = os.getenv('TO_ADDR', 'danielcobd@gmail.com')
+FROM_ADDR = os.getenv('FROM_ADDR', '')
+TO_ADDR = os.getenv('TO_ADDR', '')
 
 # endregion GLOBAL Variables
 
