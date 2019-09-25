@@ -259,7 +259,7 @@ def split_attach(input_file_path, output_file_name):
 # endregion
 
 
-# region code
+# region Run
 def run():
 
     # Verify email
@@ -278,31 +278,35 @@ def run():
         for attach in msg.attachs:
 
             filepath = msg.get_attach_path(attach)
+            extension = attach.split('.')[-1].lower()
             size = os.stat(filepath).st_size
 
             if(size > 3000000):
+                # switch case with if
+                if(extension == 'pdf'):
+                    attach_compress = f'c_{attach}'
+                    compress(filepath, attach_compress, power=4)
+                    msg_compress = MessageProcessed(msg, attach_compress)
+                    size_compress = os.stat(msg_compress.get_attach_path()).st_size
 
-                attach_compress = f'c_{attach}'
-
-                compress(filepath, attach_compress, power=4)
-
-                msg_compress = MessageProcessed(msg, attach_compress)
-
-                size_compress = os.stat(msg_compress.get_attach_path()).st_size
-
-                if(size_compress > 3000000):
-                    # Lets split
-                    msg_compress = MessageProcessed(msg, '')
-                    msg_compress.subject = f'ERRO: arquivo({attach}) ainda é grande'
-                    send_email(msg_compress)
-
+                    if(size_compress > 3000000):
+                        # Lets split
+                        msg_compress = MessageProcessed(msg, '')
+                        msg_compress.subject = f'ERRO: arquivo({attach}) ainda é grande'
+                        send_email(msg_compress)
+                    else:
+                        send_email(msg_compress)
+                elif(extension == 'other'):
+                    pass
                 else:
+                    msg_compress = MessageProcessed(msg, '')
+                    msg_compress.subject = f'ERRO: arquivo({attach}) é grande e não é .pdf'
                     send_email(msg_compress)
             else:
                 msg_compress = MessageProcessed(msg, attach)
                 send_email(msg_compress)
 
-# endregion code
+# endregion Run
 
 while True:
     time_now = datetime.datetime.now()
