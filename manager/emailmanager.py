@@ -1,5 +1,4 @@
-from os import stat
-from os.path import path
+from os import stat, path
 import logging as log
 
 from manager.filemanager import FileManager
@@ -56,7 +55,8 @@ class EmailManager:
             # Msg without attach
             if(len(msg.attachs) == 0):
                 msg.subject = f'[ERRO: sem anexo]{msg.subject}'
-                smtp_mngr.send_email(msg, from_addr)
+                smtp_mngr.send_email(msg, to_addr, from_addr)
+                imap_mngr.mark_message(msg)
                 continue
 
             # Each attach per message
@@ -69,7 +69,7 @@ class EmailManager:
                 if(size < 3000000):
                     msg_child = copy_only_message(msg)
                     msg_child.attachs.append(atch_name)
-                    smtp_mngr.send_email(msg_child, from_addr)
+                    smtp_mngr.send_email(msg_child, to_addr, from_addr)
                 else:
                     # switch case with if
                     if(extension == 'pdf'):
@@ -88,13 +88,22 @@ class EmailManager:
                             msg_child = Message()
                             msg_child.subject = f'ERRO: arquivo({atch_name})' \
                                                 'ainda é grande'
-                            smtp_mngr.send_email(msg_child, from_addr)
+                            smtp_mngr.send_email(msg_child, to_addr, from_addr)
                         else:
-                            smtp_mngr.send_email(msg_child, from_addr)
+                            smtp_mngr.send_email(msg_child, to_addr, from_addr)
                     elif(extension == 'other'):
                         pass
                     else:
                         msg_err = copy_only_message(msg)
                         msg_err.subject = f'ERRO: arquivo({atch_name})' \
                                           'é grande e não é .pdf'
-                        smtp_mngr.send_email(msg_err, from_addr)
+                        smtp_mngr.send_email(msg_err, to_addr, from_addr)
+
+        imap_mngr.mark_message(msg)
+
+    def send_error_email(self, msg_body, to_addr, from_addr):
+        smtp_mngr = self.__SMTPManager__
+        msg = Message()
+        msg.subject = '[ERRO internal]'
+        msg.body = str(msg_body)
+        smtp_mngr.send_email(msg, to_addr, from_addr)

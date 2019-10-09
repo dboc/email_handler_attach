@@ -1,5 +1,6 @@
 import subprocess
-from os.path import path
+from os import path
+import logging as log
 
 
 class FileManager(object):
@@ -26,7 +27,7 @@ class FileManager(object):
         if input_file_path.split('.')[-1].lower() != 'pdf':
             raise Exception('Error: input file is not a PDF')
 
-        print('Compress PDF...')
+        log.info('Compress PDF...')
 
         output_file_path = path.join(path.dirname(input_file_path),
                                      output_file_name)
@@ -41,9 +42,9 @@ class FileManager(object):
                         )
         final_size = path.getsize(output_file_path)
         ratio = 1 - (final_size / initial_size)
-        print('Compression by {0:.0%}.'.format(ratio))
-        print('Final file size is {0:.1f}MB'.format(final_size / 1000000))
-        print('Done.')
+        log.info('Compression by {0:.0%}.'.format(ratio))
+        log.info('Final file size is {0:.1f}MB'.format(final_size / 1000000))
+        log.info('Done.')
 
     def split_attach(self, input_file_path, output_file_name):
         """Function to split PDF via Ghostscript command line interface"""
@@ -58,7 +59,7 @@ class FileManager(object):
         if file_ext != 'pdf':
             raise Exception('Error: input file is not a PDF')
 
-        print('Split PDF...')
+        log.info('Split PDF...')
         output_file_path = path.join(path.dirname(input_file_path),
                                      output_file_name)
         subprocess.call([self.__gc_bin__, '-sDEVICE=pdfwrite',
@@ -67,4 +68,4 @@ class FileManager(object):
                          input_file_path]
                         )
         # listdir()
-        print('Splitted')
+        log.info('Splitted')

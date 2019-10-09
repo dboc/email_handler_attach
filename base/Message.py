@@ -7,14 +7,20 @@ class Message:
     def __init__(self, uid='',
                  subject='', rec_addr='',
                  body='', date='',
-                 attachs=[], folder=''):
+                 attachs=None, folder='',
+                 to_addr='', from_addr=''):
         self.__subject = subject
         self.rec_addr = rec_addr
         self.body = body
         self.date = date
-        self.attachs = attachs
         self.folder = folder
         self.uid = uid
+        self.to_addr = to_addr
+        self.from_addr = from_addr
+        if(attachs is None):
+            self.attachs = []
+        else:
+            self.attachs = attachs
 
     @property
     def subject(self):

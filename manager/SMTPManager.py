@@ -1,4 +1,5 @@
 import smtplib
+import logging as log
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -16,8 +17,9 @@ class SMTPManager(object):
         self.__user = user
         self.__password = password
 
-    def send_email(self, message, from_addr):
+    def send_email(self, message, to_addr, from_addr):
         message.from_addr = from_addr
+        message.to_addr = to_addr
 
         msg_mime = MIMEMultipart()
         msg_mime['From'] = message.from_addr
@@ -41,6 +43,6 @@ class SMTPManager(object):
         smtp.login(self.__user, self.__password)
         text = msg_mime.as_string()
         smtp.sendmail(message.from_addr, message.to_addr, text)
-        print(f'msg sent {message.subject}')
+        log.info(f'MSG sent {message.subject}')
 
         smtp.quit()
