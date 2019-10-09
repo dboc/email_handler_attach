@@ -1,24 +1,44 @@
 import datetime
 import time
-from os import stat
+import logging as log
 
-import control
-from base import Message, MessageProcessed
+from manager.emailmanager import EmailManager
+
+from os import getenv, path
+# region ENV Variables
+GC_BIN = getenv('GC_BIN', r'C:\Program Files\gs\gs9.27\bin\gswin64c.exe')
+PATH_ATTACHS = getenv('PATH_ATTACHS', path.dirname(path.realpath(__file__)))
+HOST_SMTP = getenv('HOST_SMTP', 'smtp.gmail.com')
+HOST_IMAP = getenv('HOST_IMAP', 'imap.gmail.com')
+USER = getenv('USER', 'hmcamila.caixa')
+PSS = getenv('PSS', 'lpljixgslgoaipiz')
+FROM_ADDR = getenv('FROM_ADDR', 'hmcamila.caixa@gmail.com')
+TO_ADDR = getenv('TO_ADDR', 'daniel.carvalho@prodest.gov.br')
+SRCH_STRING = getenv('SRCH_STRING', 'X-GM-RAW in:PROCESSAR')
+# endregion ENV Variables
 
 
-
-# endregion Run
+email_handler = EmailManager(host_smtp=HOST_SMTP,
+                             host_imap=HOST_IMAP,
+                             user=USER,
+                             password=PSS,
+                             attachs_path=PATH_ATTACHS,
+                             gc_bin=GC_BIN)
 
 while True:
     time_now = datetime.datetime.now()
     if(time_now.hour > 18):
-        print(f'Next execution:{time_now + datetime.timedelta(hours=12)}')
+        log.info(f'Next execution:{time_now + datetime.timedelta(hours=12)}')
         time.sleep(3600*12)
     else:
         try:
-            run()
+            email_handler.redirect_attached_msg(TO_ADDR,
+                                                FROM_ADDR,
+                                                PATH_ATTACHS,
+                                                SRCH_STRING)
         except Exception as e:
-            print(e)
+            log.info(e)
         finally:
-            print(f'Next execution:{time_now + datetime.timedelta(hours=1)}')
+            log.info('Next execution:' /
+                     f'{time_now + datetime.timedelta(hours=1)}')
             time.sleep(3600)

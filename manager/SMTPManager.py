@@ -6,7 +6,7 @@ from email.mime.base import MIMEBase
 from email import header, utils, encoders
 from email import message_from_string
 
-from base import Message
+from base.message import Message
 
 
 class SMTPManager(object):
@@ -16,9 +16,10 @@ class SMTPManager(object):
         self.__user = user
         self.__password = password
 
-    def send_email(self, message):
-        msg_mime = MIMEMultipart()
+    def send_email(self, message, from_addr):
+        message.from_addr = from_addr
 
+        msg_mime = MIMEMultipart()
         msg_mime['From'] = message.from_addr
         msg_mime['To'] = message.to_addr
         msg_mime['Subject'] = message.subject

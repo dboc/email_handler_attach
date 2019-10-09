@@ -1,5 +1,5 @@
-
 import os
+import copy
 
 
 class Message:
@@ -30,23 +30,8 @@ class Message:
         else:
             raise Exception('Attach not exist')
 
-# class MessageProcessed(Message):
-#     def __init__(self, msgParent, attach):
-#         super().__init__(self)
-#         self._subject = msgParent._subject
-#         self.rec_addr = msgParent.rec_addr
-#         self.body = msgParent.body
-#         self.date = msgParent.date
-#         self.attachs = attach
-#         self.folder = msgParent.folder
-#         self.partnum = 0
-#     @property
-#     def subject(self):
-#         if(self.partnum >= 0):
-#             return f'[{self.rec_addr}] {self._subject} {self.attachs}'
-#         else:
-#             return f'[{self.rec_addr}] {self._subject} {self.attachs}' \
-#                    '[{self.partnum}]'
-#     def get_attach_path(self):
-#         return os.path.join(PATH_ATTACHS, self.folder, self.attachs)
-# # endregion Class definition
+
+def copy_only_message(messageIn):
+    cp = copy.deepcopy(messageIn)
+    cp.attachs = []
+    return cp
