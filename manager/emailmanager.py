@@ -99,7 +99,7 @@ class EmailManager:
                                           'é grande e não é .pdf'
                         smtp_mngr.send_email(msg_err, to_addr, from_addr)
 
-        imap_mngr.mark_message(msg)
+            imap_mngr.mark_message(msg)
 
     def send_error_email(self, msg_body, to_addr, from_addr):
         smtp_mngr = self.__SMTPManager__
