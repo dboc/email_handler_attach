@@ -1,4 +1,4 @@
-from os import stat, path
+from os import path
 import logging as log
 
 from manager.filemanager import FileManager
@@ -64,7 +64,7 @@ class EmailManager:
                 # Get attach path
                 atch_path = msg.get_attach_path(atch_name)
                 extension = atch_name.split('.')[-1].lower()
-                size = stat(atch_path).st_size
+                size = file_mngr.verify_size(atch_path)
 
                 if(size < 3000000):
                     msg_child = copy_only_message(msg)
@@ -81,7 +81,8 @@ class EmailManager:
                         msg_child = copy_only_message(msg)
                         msg_child.attachs.append(fl_compressed)
                         # msg_child.attachs.append(fl_compressed)
-                        sz_compress = stat(msg_child.get_attach_path()).st_size
+                        atch_comp = msg_child.get_attach_path(fl_compressed)
+                        sz_compress = file_mngr.verify_size(atch_comp)
 
                         if(sz_compress > 3000000):
                             # Lets split into n Message

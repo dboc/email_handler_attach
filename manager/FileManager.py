@@ -1,5 +1,5 @@
 import subprocess
-from os import path
+from os import path, stat
 import logging as log
 
 
@@ -69,3 +69,6 @@ class FileManager(object):
                         )
         # listdir()
         log.info('Splitted')
+
+    def verify_size(self, file_path):
+        return stat(file_path).st_size
