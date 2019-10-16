@@ -5,6 +5,8 @@ import logging as log
 from manager.emailmanager import EmailManager
 
 from os import getenv, path
+# version
+version = 0.3
 # region ENV Variables
 GC_BIN = getenv('GC_BIN', r'C:\Program Files\gs\gs9.27\bin\gswin64c.exe')
 PATH_ATTACHS = getenv('PATH_ATTACHS', path.dirname(path.realpath(__file__)))
@@ -24,7 +26,7 @@ email_handler = EmailManager(host_smtp=HOST_SMTP,
                              password=PSS,
                              attachs_path=PATH_ATTACHS,
                              gc_bin=GC_BIN)
-
+log.info(f"Version {version}")
 while True:
     time_now = datetime.datetime.now()
     if(time_now.hour > 19):

@@ -73,16 +73,32 @@ class EmailManager:
                 else:
                     # switch case with if
                     if(extension == 'pdf'):
-                        # compress file
-                        fl_compressed = f'c_{atch_name}'
-                        file_mngr.compress(atch_path,
-                                           fl_compressed,
-                                           power=4)
-                        msg_child = copy_only_message(msg)
-                        msg_child.attachs.append(fl_compressed)
-                        # msg_child.attachs.append(fl_compressed)
-                        atch_comp = msg_child.get_attach_path(fl_compressed)
-                        sz_compress = file_mngr.verify_size(atch_comp)
+
+                        if("SEPARAR" in msg.subject):
+                            fl_split = f's_{atch_name}'
+                            list_flsplit = file_mngr.split_attach(atch_path,
+                                                                  fl_split)
+                            for fl in list_flsplit:
+                                msg_child = copy_only_message(msg)
+                                msg_child.attachs.append(fl)
+                                smtp_mngr.send_email(msg_child,
+                                                     to_addr,
+                                                     from_addr)
+                        levelCompress = 0
+                        while(levelCompress <= 4):
+                            # compress file
+                            fl_compress = f'c_{atch_name}'
+                            file_mngr.compress(atch_path,
+                                               fl_compress,
+                                               power=levelCompress)
+                            # create msg
+                            msg_child = copy_only_message(msg)
+                            msg_child.attachs.append(fl_compress)
+                            atch_comp = msg_child.get_attach_path(fl_compress)
+                            sz_compress = file_mngr.verify_size(atch_comp)
+                            levelCompress = levelCompress + 1
+                            if(sz_compress < 3000000):
+                                break
 
                         if(sz_compress > 3000000):
                             # Lets split into n Message

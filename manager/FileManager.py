@@ -1,5 +1,5 @@
 import subprocess
-from os import path, stat
+from os import path, stat, scandir
 import logging as log
 
 
@@ -48,7 +48,7 @@ class FileManager(object):
 
     def split_attach(self, input_file_path, output_file_name):
         """Function to split PDF via Ghostscript command line interface"""
-
+        list_files_name = []
         # Check if valid path
         if not path.isfile(input_file_path):
             raise Exception('Error: invalid path for input PDF file')
@@ -61,14 +61,19 @@ class FileManager(object):
 
         log.info('Split PDF...')
         output_file_path = path.join(path.dirname(input_file_path),
-                                     output_file_name)
+                                     f'%d{output_file_name}')
         subprocess.call([self.__gc_bin__, '-sDEVICE=pdfwrite',
                          '-dNOPAUSE', '-dQUIET', '-dBATCH',
                          f'-sOutputFile={output_file_path}',
                          input_file_path]
                         )
-        # listdir()
+        with scandir(path.dirname(input_file_path)) as it:
+            for entry in it:
+                if(entry.is_file() and output_file_name in entry.name):
+                    list_files_name.append(entry.name)
+
         log.info('Splitted')
+        return list_files_name
 
     def verify_size(self, file_path):
         return stat(file_path).st_size
