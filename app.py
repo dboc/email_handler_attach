@@ -17,6 +17,7 @@ PSS = getenv('PSS', '')
 FROM_ADDR = getenv('FROM_ADDR', '')
 TO_ADDR = getenv('TO_ADDR', '')
 SRCH_STRING = getenv('SRCH_STRING', 'X-GM-RAW in:PROCESSAR')
+SIZE_LIMIT = getenv('SIZE_LIMIT', '3000000')
 # endregion ENV Variables
 log.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=log.INFO)
 
@@ -37,7 +38,8 @@ while True:
             email_handler.redirect_attached_msg(TO_ADDR,
                                                 FROM_ADDR,
                                                 PATH_ATTACHS,
-                                                SRCH_STRING)
+                                                SRCH_STRING,
+                                                SIZE_LIMIT)
         except Exception as e:
             log.exception(e)
             email_handler.send_error_email(e, TO_ADDR, FROM_ADDR)

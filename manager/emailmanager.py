@@ -33,7 +33,7 @@ class EmailManager:
                               from_addr=None,
                               folder='',
                               search_str='X-GM-RAW in:PROCESSAR',
-                              size_limit=3):
+                              size_limit=3000000):
         # simplify
         imap_mngr = self.__IMAPManager__
         smtp_mngr = self.__SMTPManager__
@@ -66,7 +66,7 @@ class EmailManager:
                 extension = atch_name.split('.')[-1].lower()
                 size = file_mngr.verify_size(atch_path)
 
-                if(size < 3000000):
+                if(size < size_limit):
                     msg_child = copy_only_message(msg)
                     msg_child.attachs.append(atch_name)
                     smtp_mngr.send_email(msg_child, to_addr, from_addr)
@@ -97,10 +97,10 @@ class EmailManager:
                             atch_comp = msg_child.get_attach_path(fl_compress)
                             sz_compress = file_mngr.verify_size(atch_comp)
                             levelCompress = levelCompress + 1
-                            if(sz_compress < 3000000):
+                            if(sz_compress < size_limit):
                                 break
 
-                        if(sz_compress > 3000000):
+                        if(sz_compress > size_limit):
                             # Lets split into n Message
                             msg_child = Message()
                             msg_child.subject = f'ERRO: arquivo({atch_name})' \
