@@ -17,7 +17,7 @@ PSS = getenv('PSS', '')
 FROM_ADDR = getenv('FROM_ADDR', '')
 TO_ADDR = getenv('TO_ADDR', '')
 SRCH_STRING = getenv('SRCH_STRING', 'X-GM-RAW in:PROCESSAR')
-SIZE_LIMIT = getenv('SIZE_LIMIT', '3000000')
+SIZE_LIMIT = int(getenv('SIZE_LIMIT', '3000000'))
 # endregion ENV Variables
 log.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=log.INFO)
 
